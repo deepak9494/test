@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome to P99soft Limited</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f8ff; padding: 20px; }
+    h1 { color: #2c3e50; }
+    ul { list-style: none; padding: 0; }
+    li { background: #3498db; color: white; margin: 5px 0; padding: 8px 12px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to P99soft Limited</h1>
+  <h2>Employees List</h2>
+  <ul id="employees-list">
+    <li>Loading employees...</li>
+  </ul>
+
+  <script>
+    fetch('/employees')
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById('employees-list');
+        list.innerHTML = ''; // Clear loading text
+
+        if (data.length === 0) {
+          list.innerHTML = '<li>No employees found</li>';
+        } else {
+          data.forEach(emp => {
+            const li = document.createElement('li');
+            li.textContent = emp.name + ' — ' + emp.location + ' — ' + emp.currentProject;
+            list.appendChild(li);
+          });
+        }
+      })
+      .catch(err => {
+        const list = document.getElementById('employees-list');
+        list.innerHTML = '<li>Error loading employees</li>';
+        console.error('Failed to fetch employees:', err);
+      });
+  </script>
+</body>
+</html>
